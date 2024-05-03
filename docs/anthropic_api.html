@@ -29,6 +29,12 @@
 <pre><code class="python">from .abstract import TextGenerationAPI
 
 
+async def _get_stream_outputs(response):
+    async for chunk in response:
+        if chunk.type == &#34;content_block_delta&#34;:
+            yield chunk.delta.text
+
+
 class AnthropicAPI(TextGenerationAPI):
     def __init__(self, client):
         self.client = client
@@ -42,7 +48,11 @@ class AnthropicAPI(TextGenerationAPI):
             max_tokens=256,
             **kwargs,
         )
-        return response.content[0].text</code></pre>
+
+        if &#34;stream&#34; in kwargs and kwargs[&#34;stream&#34;] is True:
+            return _get_stream_outputs(response)
+        else:
+            return response.content[0].text</code></pre>
 </details>
 </section>
 <section>
@@ -77,7 +87,11 @@ class AnthropicAPI(TextGenerationAPI):
             max_tokens=256,
             **kwargs,
         )
-        return response.content[0].text</code></pre>
+
+        if &#34;stream&#34; in kwargs and kwargs[&#34;stream&#34;] is True:
+            return _get_stream_outputs(response)
+        else:
+            return response.content[0].text</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

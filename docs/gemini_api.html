@@ -26,7 +26,21 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from .abstract import TextGenerationAPI
+<pre><code class="python">import asyncio
+from .abstract import TextGenerationAPI
+
+
+async def _word_generator(sentence):
+    for word in sentence.split(&#34; &#34;):
+        yield word + &#34; &#34;
+        delay = 0.03 + (len(word) * 0.005)
+        await asyncio.sleep(delay)  # Simulate a short delay
+
+
+async def _get_stream_outputs(response):
+    async for chunk in response:
+        async for word in _word_generator(chunk.text):
+            yield word
 
 
 class GeminiAPI(TextGenerationAPI):
@@ -37,7 +51,11 @@ class GeminiAPI(TextGenerationAPI):
             model_name=model, system_instruction=system_instruction
         )
         response = await model.generate_content_async([prompt], **kwargs)
-        return response.text
+
+        if &#34;stream&#34; in kwargs and kwargs[&#34;stream&#34;] is True:
+            return _get_stream_outputs(response)
+        else:
+            return response.text
 
 
 class GeminiVertexAPI(TextGenerationAPI):
@@ -46,7 +64,11 @@ class GeminiVertexAPI(TextGenerationAPI):
 
         model = GenerativeModel(model_name=model, system_instruction=system_instruction)
         response = await model.generate_content_async([prompt], **kwargs)
-        return response.text</code></pre>
+
+        if &#34;stream&#34; in kwargs and kwargs[&#34;stream&#34;] is True:
+            return _get_stream_outputs(response)
+        else:
+            return response.text</code></pre>
 </details>
 </section>
 <section>
@@ -75,7 +97,11 @@ class GeminiVertexAPI(TextGenerationAPI):
             model_name=model, system_instruction=system_instruction
         )
         response = await model.generate_content_async([prompt], **kwargs)
-        return response.text</code></pre>
+
+        if &#34;stream&#34; in kwargs and kwargs[&#34;stream&#34;] is True:
+            return _get_stream_outputs(response)
+        else:
+            return response.text</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -105,7 +131,11 @@ class GeminiVertexAPI(TextGenerationAPI):
 
         model = GenerativeModel(model_name=model, system_instruction=system_instruction)
         response = await model.generate_content_async([prompt], **kwargs)
-        return response.text</code></pre>
+
+        if &#34;stream&#34; in kwargs and kwargs[&#34;stream&#34;] is True:
+            return _get_stream_outputs(response)
+        else:
+            return response.text</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

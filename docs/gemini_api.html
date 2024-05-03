@@ -28,11 +28,23 @@
 </summary>
 <pre><code class="python">from .abstract import TextGenerationAPI
 
-class GeminiAPI(TextGenerationAPI):    
+
+class GeminiAPI(TextGenerationAPI):
     async def generate_text(self, model, prompt, system_instruction=None, **kwargs):
         import google.generativeai as genai
 
-        model = genai.GenerativeModel(model_name=model, system_instruction=system_instruction)
+        model = genai.GenerativeModel(
+            model_name=model, system_instruction=system_instruction
+        )
+        response = await model.generate_content_async([prompt], **kwargs)
+        return response.text
+
+
+class GeminiVertexAPI(TextGenerationAPI):
+    async def generate_text(self, model, prompt, system_instruction=None, **kwargs):
+        from vertexai.generative_models import GenerativeModel
+
+        model = GenerativeModel(model_name=model, system_instruction=system_instruction)
         response = await model.generate_content_async([prompt], **kwargs)
         return response.text</code></pre>
 </details>
@@ -55,11 +67,43 @@ class GeminiAPI(TextGenerationAPI):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class GeminiAPI(TextGenerationAPI):    
+<pre><code class="python">class GeminiAPI(TextGenerationAPI):
     async def generate_text(self, model, prompt, system_instruction=None, **kwargs):
         import google.generativeai as genai
 
-        model = genai.GenerativeModel(model_name=model, system_instruction=system_instruction)
+        model = genai.GenerativeModel(
+            model_name=model, system_instruction=system_instruction
+        )
+        response = await model.generate_content_async([prompt], **kwargs)
+        return response.text</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="genai_apis.abstract.TextGenerationAPI" href="abstract.html#genai_apis.abstract.TextGenerationAPI">TextGenerationAPI</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="genai_apis.abstract.TextGenerationAPI" href="abstract.html#genai_apis.abstract.TextGenerationAPI">TextGenerationAPI</a></b></code>:
+<ul class="hlist">
+<li><code><a title="genai_apis.abstract.TextGenerationAPI.generate_text" href="abstract.html#genai_apis.abstract.TextGenerationAPI.generate_text">generate_text</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="genai_apis.gemini_api.GeminiVertexAPI"><code class="flex name class">
+<span>class <span class="ident">GeminiVertexAPI</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for text generation APIs.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GeminiVertexAPI(TextGenerationAPI):
+    async def generate_text(self, model, prompt, system_instruction=None, **kwargs):
+        from vertexai.generative_models import GenerativeModel
+
+        model = GenerativeModel(model_name=model, system_instruction=system_instruction)
         response = await model.generate_content_async([prompt], **kwargs)
         return response.text</code></pre>
 </details>
@@ -94,6 +138,9 @@ class GeminiAPI(TextGenerationAPI):
 <ul>
 <li>
 <h4><code><a title="genai_apis.gemini_api.GeminiAPI" href="#genai_apis.gemini_api.GeminiAPI">GeminiAPI</a></code></h4>
+</li>
+<li>
+<h4><code><a title="genai_apis.gemini_api.GeminiVertexAPI" href="#genai_apis.gemini_api.GeminiVertexAPI">GeminiVertexAPI</a></code></h4>
 </li>
 </ul>
 </li>

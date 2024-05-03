@@ -28,19 +28,18 @@
 </summary>
 <pre><code class="python">from .abstract import TextGenerationAPI
 
+
 class OpenAIAPI(TextGenerationAPI):
     def __init__(self, client):
         self.client = client
-    
+
     async def generate_text(self, model, prompt, system_instruction=&#34;&#34;, **kwargs):
         messages = [
             {&#34;role&#34;: &#34;system&#34;, &#34;content&#34;: system_instruction},
-            {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: prompt}
+            {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: prompt},
         ]
         response = await self.client.chat.completions.create(
-            model=model,
-            messages=messages,
-            **kwargs
+            model=model, messages=messages, **kwargs
         )
         return response.choices[0].message.content</code></pre>
 </details>
@@ -67,16 +66,14 @@ class OpenAIAPI(TextGenerationAPI):
 <pre><code class="python">class OpenAIAPI(TextGenerationAPI):
     def __init__(self, client):
         self.client = client
-    
+
     async def generate_text(self, model, prompt, system_instruction=&#34;&#34;, **kwargs):
         messages = [
             {&#34;role&#34;: &#34;system&#34;, &#34;content&#34;: system_instruction},
-            {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: prompt}
+            {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: prompt},
         ]
         response = await self.client.chat.completions.create(
-            model=model,
-            messages=messages,
-            **kwargs
+            model=model, messages=messages, **kwargs
         )
         return response.choices[0].message.content</code></pre>
 </details>

@@ -27,31 +27,79 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from .openai_api import OpenAIAPI
-from .gemini_api import GeminiAPI
+from .gemini_api import GeminiAPI, GeminiVertexAPI
 from .anthropic_api import AnthropicAPI
+
 
 class APIFactory:
     @staticmethod
     def get_api_client(api_name, **kwargs):
-        if api_name == &#39;openai&#39;:
+        if api_name == &#34;openai&#34;:
             try:
                 from openai import AsyncOpenAI
-                return OpenAIAPI(AsyncOpenAI(api_key=kwargs[&#39;api_key&#39;]))
+
+                return OpenAIAPI(AsyncOpenAI(api_key=kwargs[&#34;api_key&#34;]))
             except ImportError:
-                raise ImportError(&#34;OpenAI library is not installed. Please install the package before proceeding.&#34;)
-        elif api_name == &#39;gemini&#39;:
+                raise ImportError(
+                    &#34;OpenAI library is not installed. Please install the package before proceeding.&#34;
+                )
+        elif api_name == &#34;gemini&#34;:
             try:
                 import google.generativeai as genai
-                genai.configure(api_key=kwargs[&#39;api_key&#39;])
+
+                genai.configure(api_key=kwargs[&#34;api_key&#34;])
                 return GeminiAPI()
             except ImportError:
-                raise ImportError(&#34;Google GenerativeAI library is not installed. Please install the package before proceeding.&#34;)
-        elif api_name == &#39;anthropic&#39;:
+                raise ImportError(
+                    &#34;Google GenerativeAI library is not installed. Please install the package before proceeding.&#34;
+                )
+        elif api_name == &#34;gemini-vertex&#34;:
+            try:
+                import vertexai
+
+                vertexai.init(
+                    project=kwargs[&#34;GCP_PROJECT_ID&#34;],
+                    location=kwargs[&#34;GCP_PROJECT_LOCATION&#34;],
+                )
+                return GeminiVertexAPI()
+            except ImportError:
+                raise ImportError(
+                    &#34;Google google-cloud-aiplatform library is not installed. Please install the package before proceeding.&#34;
+                )
+        elif api_name == &#34;anthropic&#34;:
             try:
                 from anthropic import AsyncAnthropic
-                return AnthropicAPI(AsyncAnthropic(api_key=kwargs[&#39;api_key&#39;]))
+
+                return AnthropicAPI(AsyncAnthropic(api_key=kwargs[&#34;api_key&#34;]))
             except ImportError:
-                raise ImportError(&#34;Anthropic library is not installed. Please install the package before proceeding.&#34;)
+                raise ImportError(
+                    &#34;Anthropic library is not installed. Please install the package before proceeding.&#34;
+                )
+        elif api_name == &#34;anthropic-vertex&#34;:
+            try:
+                from anthropic import AsyncAnthropicVertex
+
+                return AnthropicAPI(
+                    AsyncAnthropicVertex(
+                        project_id=kwargs[&#34;GCP_PROJECT_ID&#34;],
+                        region=kwargs[&#34;GCP_PROJECT_LOCATION&#34;],
+                    )
+                )
+            except ImportError:
+                raise ImportError(
+                    &#34;Anthropic library is not installed. Please install the package before proceeding.&#34;
+                )
+        elif api_name == &#34;anthropic-bedrock&#34;:
+            try:
+                from anthropic import AsyncAnthropicBedrock
+
+                return AnthropicAPI(
+                    AsyncAnthropicBedrock(aws_region=kwargs[&#34;AWS_REGION&#34;])
+                )
+            except ImportError:
+                raise ImportError(
+                    &#34;Anthropic library is not installed. Please install the package before proceeding.&#34;
+                )
         else:
             raise ValueError(&#34;Unsupported API&#34;)</code></pre>
 </details>
@@ -77,25 +125,72 @@ class APIFactory:
 <pre><code class="python">class APIFactory:
     @staticmethod
     def get_api_client(api_name, **kwargs):
-        if api_name == &#39;openai&#39;:
+        if api_name == &#34;openai&#34;:
             try:
                 from openai import AsyncOpenAI
-                return OpenAIAPI(AsyncOpenAI(api_key=kwargs[&#39;api_key&#39;]))
+
+                return OpenAIAPI(AsyncOpenAI(api_key=kwargs[&#34;api_key&#34;]))
             except ImportError:
-                raise ImportError(&#34;OpenAI library is not installed. Please install the package before proceeding.&#34;)
-        elif api_name == &#39;gemini&#39;:
+                raise ImportError(
+                    &#34;OpenAI library is not installed. Please install the package before proceeding.&#34;
+                )
+        elif api_name == &#34;gemini&#34;:
             try:
                 import google.generativeai as genai
-                genai.configure(api_key=kwargs[&#39;api_key&#39;])
+
+                genai.configure(api_key=kwargs[&#34;api_key&#34;])
                 return GeminiAPI()
             except ImportError:
-                raise ImportError(&#34;Google GenerativeAI library is not installed. Please install the package before proceeding.&#34;)
-        elif api_name == &#39;anthropic&#39;:
+                raise ImportError(
+                    &#34;Google GenerativeAI library is not installed. Please install the package before proceeding.&#34;
+                )
+        elif api_name == &#34;gemini-vertex&#34;:
+            try:
+                import vertexai
+
+                vertexai.init(
+                    project=kwargs[&#34;GCP_PROJECT_ID&#34;],
+                    location=kwargs[&#34;GCP_PROJECT_LOCATION&#34;],
+                )
+                return GeminiVertexAPI()
+            except ImportError:
+                raise ImportError(
+                    &#34;Google google-cloud-aiplatform library is not installed. Please install the package before proceeding.&#34;
+                )
+        elif api_name == &#34;anthropic&#34;:
             try:
                 from anthropic import AsyncAnthropic
-                return AnthropicAPI(AsyncAnthropic(api_key=kwargs[&#39;api_key&#39;]))
+
+                return AnthropicAPI(AsyncAnthropic(api_key=kwargs[&#34;api_key&#34;]))
             except ImportError:
-                raise ImportError(&#34;Anthropic library is not installed. Please install the package before proceeding.&#34;)
+                raise ImportError(
+                    &#34;Anthropic library is not installed. Please install the package before proceeding.&#34;
+                )
+        elif api_name == &#34;anthropic-vertex&#34;:
+            try:
+                from anthropic import AsyncAnthropicVertex
+
+                return AnthropicAPI(
+                    AsyncAnthropicVertex(
+                        project_id=kwargs[&#34;GCP_PROJECT_ID&#34;],
+                        region=kwargs[&#34;GCP_PROJECT_LOCATION&#34;],
+                    )
+                )
+            except ImportError:
+                raise ImportError(
+                    &#34;Anthropic library is not installed. Please install the package before proceeding.&#34;
+                )
+        elif api_name == &#34;anthropic-bedrock&#34;:
+            try:
+                from anthropic import AsyncAnthropicBedrock
+
+                return AnthropicAPI(
+                    AsyncAnthropicBedrock(aws_region=kwargs[&#34;AWS_REGION&#34;])
+                )
+            except ImportError:
+                raise ImportError(
+                    &#34;Anthropic library is not installed. Please install the package before proceeding.&#34;
+                )
         else:
             raise ValueError(&#34;Unsupported API&#34;)</code></pre>
 </details>
@@ -112,25 +207,72 @@ class APIFactory:
 </summary>
 <pre><code class="python">@staticmethod
 def get_api_client(api_name, **kwargs):
-    if api_name == &#39;openai&#39;:
+    if api_name == &#34;openai&#34;:
         try:
             from openai import AsyncOpenAI
-            return OpenAIAPI(AsyncOpenAI(api_key=kwargs[&#39;api_key&#39;]))
+
+            return OpenAIAPI(AsyncOpenAI(api_key=kwargs[&#34;api_key&#34;]))
         except ImportError:
-            raise ImportError(&#34;OpenAI library is not installed. Please install the package before proceeding.&#34;)
-    elif api_name == &#39;gemini&#39;:
+            raise ImportError(
+                &#34;OpenAI library is not installed. Please install the package before proceeding.&#34;
+            )
+    elif api_name == &#34;gemini&#34;:
         try:
             import google.generativeai as genai
-            genai.configure(api_key=kwargs[&#39;api_key&#39;])
+
+            genai.configure(api_key=kwargs[&#34;api_key&#34;])
             return GeminiAPI()
         except ImportError:
-            raise ImportError(&#34;Google GenerativeAI library is not installed. Please install the package before proceeding.&#34;)
-    elif api_name == &#39;anthropic&#39;:
+            raise ImportError(
+                &#34;Google GenerativeAI library is not installed. Please install the package before proceeding.&#34;
+            )
+    elif api_name == &#34;gemini-vertex&#34;:
+        try:
+            import vertexai
+
+            vertexai.init(
+                project=kwargs[&#34;GCP_PROJECT_ID&#34;],
+                location=kwargs[&#34;GCP_PROJECT_LOCATION&#34;],
+            )
+            return GeminiVertexAPI()
+        except ImportError:
+            raise ImportError(
+                &#34;Google google-cloud-aiplatform library is not installed. Please install the package before proceeding.&#34;
+            )
+    elif api_name == &#34;anthropic&#34;:
         try:
             from anthropic import AsyncAnthropic
-            return AnthropicAPI(AsyncAnthropic(api_key=kwargs[&#39;api_key&#39;]))
+
+            return AnthropicAPI(AsyncAnthropic(api_key=kwargs[&#34;api_key&#34;]))
         except ImportError:
-            raise ImportError(&#34;Anthropic library is not installed. Please install the package before proceeding.&#34;)
+            raise ImportError(
+                &#34;Anthropic library is not installed. Please install the package before proceeding.&#34;
+            )
+    elif api_name == &#34;anthropic-vertex&#34;:
+        try:
+            from anthropic import AsyncAnthropicVertex
+
+            return AnthropicAPI(
+                AsyncAnthropicVertex(
+                    project_id=kwargs[&#34;GCP_PROJECT_ID&#34;],
+                    region=kwargs[&#34;GCP_PROJECT_LOCATION&#34;],
+                )
+            )
+        except ImportError:
+            raise ImportError(
+                &#34;Anthropic library is not installed. Please install the package before proceeding.&#34;
+            )
+    elif api_name == &#34;anthropic-bedrock&#34;:
+        try:
+            from anthropic import AsyncAnthropicBedrock
+
+            return AnthropicAPI(
+                AsyncAnthropicBedrock(aws_region=kwargs[&#34;AWS_REGION&#34;])
+            )
+        except ImportError:
+            raise ImportError(
+                &#34;Anthropic library is not installed. Please install the package before proceeding.&#34;
+            )
     else:
         raise ValueError(&#34;Unsupported API&#34;)</code></pre>
 </details>

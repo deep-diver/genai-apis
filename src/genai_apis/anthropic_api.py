@@ -1,6 +1,12 @@
 from .abstract import TextGenerationAPI
 
 
+async def _get_stream_outputs(response):
+    async for chunk in response:
+        if chunk.type == "content_block_delta":
+            yield chunk.delta.text
+
+
 class AnthropicAPI(TextGenerationAPI):
     def __init__(self, client):
         self.client = client
@@ -14,4 +20,8 @@ class AnthropicAPI(TextGenerationAPI):
             max_tokens=256,
             **kwargs,
         )
-        return response.content[0].text
+
+        if "stream" in kwargs and kwargs["stream"] is True:
+            return _get_stream_outputs(response)
+        else:
+            return response.content[0].text

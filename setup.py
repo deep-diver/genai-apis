@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="genai_apis",
-    version="0.0.1",
+    version="0.0.2",
     description="GenAI APIs provides a unified API callers to Gemini API, OpenAI API, and Anthropic API.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -15,8 +15,11 @@ setup(
     install_requires=["asyncio"],
     extras_require={
         "openai": ["openai"],
-        "google": ["google-generativeai"],
+        "gemini": ["google-generativeai"],
+        "gemini-vertex": ["google-cloud-aiplatform"],
         "anthropic": ["anthropic"],
+        "anthropic-bedrock": ["anthropic[bedrock]"],
+        "anthropic-vertex": ["anthropic[vertex]"],
     },
     packages=["genai_apis"],
     package_dir={"": "src"},

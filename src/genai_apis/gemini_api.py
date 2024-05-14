@@ -19,13 +19,15 @@ class GeminiAPI(TextGenerationAPI):
     async def generate_text(self, model, prompt, system_instruction=None, **kwargs):
         import google.generativeai as genai
 
+        stream = False
+        if "stream" in kwargs:
+            stream = kwargs.pop("stream")
         generation_config = genai.types.GenerationConfig(**kwargs)
-
         model = genai.GenerativeModel(
             model_name=model, system_instruction=system_instruction
         )
         response = await model.generate_content_async(
-            [prompt], generation_config=generation_config
+            [prompt], generation_config=generation_config, stream=stream
         )
 
         if "stream" in kwargs and kwargs["stream"] is True:
@@ -39,10 +41,13 @@ class GeminiVertexAPI(TextGenerationAPI):
         from vertexai.generative_models import GenerativeModel
         from vertexai import generative_models
 
+        stream = False
+        if "stream" in kwargs:
+            stream = kwargs.pop("stream")
         generation_config = generative_models.GenerationConfig(**kwargs)
         model = GenerativeModel(model_name=model, system_instruction=system_instruction)
         response = await model.generate_content_async(
-            [prompt], generation_config=generation_config
+            [prompt], generation_config=generation_config, stream=stream
         )
 
         if "stream" in kwargs and kwargs["stream"] is True:

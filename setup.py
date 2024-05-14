@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="genai_apis",
-    version="0.0.6",
+    version="0.0.7",
     description="GenAI APIs provides a unified API callers to Gemini API, OpenAI API, and Anthropic API.",
     long_description=long_description,
     long_description_content_type="text/markdown",

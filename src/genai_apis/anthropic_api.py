@@ -17,7 +17,6 @@ class AnthropicAPI(TextGenerationAPI):
             model=model,
             system=system_instruction,
             messages=messages,
-            max_tokens=256,
             **kwargs,
         )
 

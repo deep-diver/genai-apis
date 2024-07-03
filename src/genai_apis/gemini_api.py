@@ -1,6 +1,7 @@
 import asyncio
 from .abstract import TextGenerationAPI
 
+
 async def _word_generator(sentence):
     for word in sentence.split(" "):
         yield word + " "
@@ -31,10 +32,10 @@ class GeminiAPI(TextGenerationAPI):
             model_name=model, system_instruction=system_instruction
         )
         response = await model.generate_content_async(
-            [prompt], 
-            generation_config=generation_config, 
+            [prompt],
+            generation_config=generation_config,
             safety_settings=safety_settings,
-            stream=stream
+            stream=stream,
         )
 
         if "stream" in kwargs and kwargs["stream"] is True:
@@ -56,21 +57,21 @@ class GeminiVertexAPI(TextGenerationAPI):
         }
 
         stream = False
-        safety_settings = None
+        safety_settings = DEFAULT_SAFETY_SETTINGS
 
         if "stream" in kwargs:
             stream = kwargs.pop("stream")
-            
+
         if "safety_settings" in kwargs:
             safety_settings = kwargs.pop("safety_settings")
 
         generation_config = generative_models.GenerationConfig(**kwargs)
         model = GenerativeModel(model_name=model, system_instruction=system_instruction)
         response = await model.generate_content_async(
-            [prompt], 
-            generation_config=generation_config, 
+            [prompt],
+            generation_config=generation_config,
             safety_settings=safety_settings,
-            stream=stream
+            stream=stream,
         )
 
         if "stream" in kwargs and kwargs["stream"] is True:
